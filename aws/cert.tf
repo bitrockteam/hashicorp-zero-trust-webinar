@@ -27,4 +27,8 @@ resource "aws_acm_certificate" "cert" {
   tags = {
     Name = "${var.tag}-${random_pet.test.id}"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
