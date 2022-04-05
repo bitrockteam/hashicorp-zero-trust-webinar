@@ -108,6 +108,4 @@ override.tf.json
 terraform.rc
 
 .idea
-aws/.terraform.lock.hcl
-boundary/.terraform.lock.hcl
 ssh-key.pem
