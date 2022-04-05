@@ -2,6 +2,9 @@
 TYPE=$1
 NAME=boundary
 
+wget -O boundary.zip https://releases.hashicorp.com/boundary/0.7.6/boundary_0.7.6_linux_amd64.zip
+unzip boundary.zip -d /usr/local/bin
+
 sudo cat << EOF > /etc/systemd/system/${NAME}-${TYPE}.service
 [Unit]
 Description=${NAME} ${TYPE}

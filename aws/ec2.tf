@@ -1,10 +1,16 @@
-locals {
-  priv_ssh_key_real = coalesce(var.priv_ssh_key_path, trimsuffix(var.pub_ssh_key_path, ".pub"))
+resource "tls_private_key" "ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = "4096"
 }
 
+resource "local_file" "ssh_key" {
+  content         = tls_private_key.ssh_key.private_key_pem
+  filename        = "ssh-key.pem"
+  file_permission = "0600"
+}
 resource "aws_key_pair" "boundary" {
   key_name   = "${var.tag}-${random_pet.test.id}"
-  public_key = file(var.pub_ssh_key_path)
+  public_key = tls_private_key.ssh_key.public_key_openssh
 
   tags = local.tags
 }
@@ -38,7 +44,7 @@ resource "aws_instance" "worker" {
   connection {
     type         = "ssh"
     user         = "ubuntu"
-    private_key  = file(local.priv_ssh_key_real)
+    private_key  = tls_private_key.ssh_key.private_key_pem
     host         = self.private_ip
     bastion_host = aws_instance.controller[count.index].public_ip
   }
@@ -48,18 +54,6 @@ resource "aws_instance" "worker" {
       "sudo mkdir -p /etc/pki/tls/boundary",
       "echo '${tls_private_key.boundary.private_key_pem}' | sudo tee ${var.tls_key_path}",
       "echo '${tls_self_signed_cert.boundary.cert_pem}' | sudo tee ${var.tls_cert_path}",
-    ]
-  }
-
-  provisioner "file" {
-    source      = "${var.boundary_bin}/boundary"
-    destination = "~/boundary"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mv ~/boundary /usr/local/bin/boundary",
-      "sudo chmod 0755 /usr/local/bin/boundary",
     ]
   }
 
@@ -115,7 +109,7 @@ resource "aws_instance" "controller" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file(local.priv_ssh_key_real)
+    private_key = tls_private_key.ssh_key.private_key_pem
     host        = self.public_ip
   }
 
@@ -124,18 +118,6 @@ resource "aws_instance" "controller" {
       "sudo mkdir -p /etc/pki/tls/boundary",
       "echo '${tls_private_key.boundary.private_key_pem}' | sudo tee ${var.tls_key_path}",
       "echo '${tls_self_signed_cert.boundary.cert_pem}' | sudo tee ${var.tls_cert_path}",
-    ]
-  }
-
-  provisioner "file" {
-    source      = "${var.boundary_bin}/boundary"
-    destination = "~/boundary"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mv ~/boundary /usr/local/bin/boundary",
-      "sudo chmod 0755 /usr/local/bin/boundary",
     ]
   }
 

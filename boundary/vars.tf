@@ -38,3 +38,7 @@ variable "target_ips" {
 variable "kms_recovery_key_id" {
   default = ""
 }
+
+variable "region" {
+  default = "us-east-1"
+}
