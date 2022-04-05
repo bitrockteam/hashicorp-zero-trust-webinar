@@ -107,3 +107,41 @@ variable "tls_disabled" {
 variable "region" {
   default = "us-east-1"
 }
+
+# Vault
+variable "ami_filter_name" {
+  type        = string
+  default     = "*caravan-centos-image-os-*"
+  description = "Regexp to find AMI to use built with caravan-baking"
+}
+variable "control_plane_instance_count" {
+  type        = number
+  default     = 3
+  description = "Control plane instances number"
+}
+
+variable "volume_root_size" {
+  type        = number
+  default     = 20
+  description = "Volume size of control plan root disk"
+}
+
+variable "volume_data_size" {
+  type        = number
+  default     = 20
+  description = "Volume size of control plan data disk"
+}
+
+variable "volume_type" {
+  type        = string
+  default     = "gp3"
+  description = "Volume type of disks"
+}
+
+variable "control_plane_machine_type" {
+  type        = string
+  default     = "t3.micro"
+  description = "Control plane instance machine type"
+}
+
+

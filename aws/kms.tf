@@ -18,3 +18,15 @@ resource "aws_kms_key" "recovery" {
   key_usage               = "ENCRYPT_DECRYPT"
   tags                    = merge(var.tags, { Purpose = "recovery" })
 }
+
+
+resource "aws_kms_key" "vault" {
+  description             = "Vault unseal key"
+  enable_key_rotation     = true
+  deletion_window_in_days = 10
+
+  tags = {
+    Name    = "vault-kms-unseal-bitrock"
+    Project = "hashicorp-zero-trust-webinar"
+  }
+}

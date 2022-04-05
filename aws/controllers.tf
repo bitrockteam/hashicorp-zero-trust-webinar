@@ -56,7 +56,7 @@ resource "aws_security_group" "alb" {
   }
 
   dynamic "ingress" {
-    for_each = [80, 443]
+    for_each = [80, 443, 8200]
 
     content {
       cidr_blocks = ["0.0.0.0/0"]
@@ -133,6 +133,10 @@ module "alb" {
     {
       port     = 80
       protocol = "HTTP"
+    },
+    {
+      port     = 8200
+      protocol = "HTTP"
     }
   ]
 
@@ -147,7 +151,31 @@ module "alb" {
       name             = "boundary"
       backend_protocol = "HTTP"
       backend_port     = 9200
-    }
+    },
+    {
+      name             = "vault"
+      backend_protocol = "HTTP"
+      backend_port     = 8200
+      health_check = {
+        protocol = "HTTP"
+        matcher  = "200"
+        path     = "/v1/sys/leader"
+      }
+      targets = {
+        vault_1 = {
+          target_id = aws_instance.vault_cluster[0].id
+          port      = 8200
+        },
+        vault_2 = {
+          target_id = aws_instance.vault_cluster[1].id
+          port      = 8200
+        },
+        vault_3 = {
+          target_id = aws_instance.vault_cluster[2].id
+          port      = 8200
+        }
+      }
+    },
   ]
 
   vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
@@ -211,7 +239,7 @@ module "controllers" {
   min_size             = var.controller_min_size
   security_groups      = [aws_security_group.controller.id]
   tags                 = var.tags
-  target_group_arns    = module.alb.target_group_arns
+  target_group_arns    = [module.alb.target_group_arns[0]]
   vpc_zone_identifier  = local.private_subnets
 
   write_files = [
