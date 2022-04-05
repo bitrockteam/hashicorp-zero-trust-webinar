@@ -20,7 +20,7 @@ data "aws_availability_zones" "available" {}
 data "aws_ami" "boundary" {
   most_recent = true
   name_regex  = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
-  owners      = ["aws-marketplace"]
+  owners      = ["099720109477"]
 }
 
 data "aws_s3_bucket_objects" "cloudinit" {
