@@ -75,13 +75,13 @@ resource "aws_security_group" "alb" {
     var.tags
   )
 
-  vpc_id = var.vpc_id
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
 resource "aws_security_group" "controller" {
   name   = "Boundary controller"
   tags   = var.tags
-  vpc_id = var.vpc_id
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
 resource "aws_security_group_rule" "ssh" {
@@ -122,7 +122,7 @@ resource "aws_security_group" "postgresql" {
   }
 
   tags   = var.tags
-  vpc_id = var.vpc_id
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
 module "alb" {
@@ -150,7 +150,7 @@ module "alb" {
     }
   ]
 
-  vpc_id = var.vpc_id
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
 resource "random_password" "postgresql" {
@@ -166,12 +166,12 @@ module "postgresql" {
   backup_retention_period = 0
   backup_window           = "03:00-06:00"
   engine                  = "postgres"
-  engine_version          = "12.4"
-  family                  = "postgres12"
+  engine_version          = "14.1"
+  family                  = "postgres14"
   identifier              = "boundary"
-  instance_class          = "db.t2.micro"
+  instance_class          = "db.t3.micro"
   maintenance_window      = "Mon:00:00-Mon:03:00"
-  major_engine_version    = "12"
+  major_engine_version    = "14"
   name                    = "boundary"
   password                = random_password.postgresql.result
   port                    = 5432
@@ -212,7 +212,7 @@ module "controllers" {
   security_groups      = [aws_security_group.controller.id]
   tags                 = var.tags
   target_group_arns    = module.alb.target_group_arns
-  vpc_zone_identifier  = var.private_subnets
+  vpc_zone_identifier  = local.private_subnets
 
   write_files = [
     {
@@ -294,7 +294,7 @@ resource "aws_security_group" "bastion" {
 
   name   = "Boundary Bastion"
   tags   = var.tags
-  vpc_id = var.vpc_id
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
 resource "aws_instance" "bastion" {

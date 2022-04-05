@@ -55,7 +55,7 @@ resource "aws_security_group" "worker" {
 
   name   = "BoundaryWorker"
   tags   = var.tags
-  vpc_id = var.vpc_id
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
 module "workers" {
@@ -73,7 +73,7 @@ module "workers" {
   min_size                = var.worker_min_size
   security_groups         = [aws_security_group.worker.id]
   tags                    = var.tags
-  vpc_zone_identifier     = var.public_subnets
+  vpc_zone_identifier     = local.public_subnets
 
   write_files = [
     {
