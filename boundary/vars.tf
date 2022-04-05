@@ -34,11 +34,3 @@ variable "target_ips" {
   type    = set(string)
   default = []
 }
-
-variable "kms_recovery_key_id" {
-  default = ""
-}
-
-variable "region" {
-  default = "us-east-1"
-}
