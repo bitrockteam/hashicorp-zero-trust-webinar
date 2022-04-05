@@ -6,7 +6,7 @@ resource "boundary_target" "backend_servers_ssh" {
   session_connection_limit = -1
   default_port             = 22
   host_source_ids = [
-    boundary_host_set.backend_servers.id
+    boundary_host_set_static.backend_servers.id
   ]
 }
 
@@ -18,6 +18,6 @@ resource "boundary_target" "backend_servers_website" {
   session_connection_limit = -1
   default_port             = 8000
   host_source_ids = [
-    boundary_host_set.backend_servers.id
+    boundary_host_set_static.backend_servers.id
   ]
 }

@@ -1,26 +1,20 @@
+# The root key used by controllers
 resource "aws_kms_key" "root" {
-  description             = "Boundary root key"
-  deletion_window_in_days = 10
-
-  tags = {
-    Name = "${var.tag}-${random_pet.test.id}"
-  }
+  deletion_window_in_days = 7
+  key_usage               = "ENCRYPT_DECRYPT"
+  tags                    = merge(var.tags, { Purpose = "root" })
 }
 
-resource "aws_kms_key" "worker_auth" {
-  description             = "Boundary worker authentication key"
-  deletion_window_in_days = 10
-
-  tags = {
-    Name = "${var.tag}-${random_pet.test.id}"
-  }
+# The worker-auth AWS KMS key used by controllers and workers
+resource "aws_kms_key" "auth" {
+  deletion_window_in_days = 7
+  key_usage               = "ENCRYPT_DECRYPT"
+  tags                    = merge(var.tags, { Purpose = "worker-auth" })
 }
 
 resource "aws_kms_key" "recovery" {
   description             = "Boundary recovery key"
-  deletion_window_in_days = 10
-
-  tags = {
-    Name = "${var.tag}-${random_pet.test.id}"
-  }
+  deletion_window_in_days = 7
+  key_usage               = "ENCRYPT_DECRYPT"
+  tags                    = merge(var.tags, { Purpose = "recovery" })
 }

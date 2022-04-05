@@ -34,3 +34,11 @@ variable "target_ips" {
   type    = set(string)
   default = []
 }
+
+variable "region" {
+  type = string
+}
+
+variable "kms_key_id" {
+  type = string
+}

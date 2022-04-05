@@ -5,7 +5,7 @@ terraform {
     organization = "bitrock-webinars"
 
     workspaces {
-      name = "hashicorp-zero-trust-webinar"
+      name = "hashicorp-zero-trust-webinar-boundary"
     }
   }
 }
