@@ -238,7 +238,7 @@ data "aws_iam_policy_document" "controller" {
 
     effect = "Allow"
 
-    resources = [aws_kms_key.auth.arn, aws_kms_key.root.arn]
+    resources = [aws_kms_key.auth.arn, aws_kms_key.root.arn, aws_kms_key.recovery.arn]
   }
 
   statement {
