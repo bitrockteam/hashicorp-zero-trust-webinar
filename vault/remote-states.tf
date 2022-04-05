@@ -1,4 +1,4 @@
-data "terraform_remote_state" "bootstrap" {
+data "terraform_remote_state" "aws" {
   backend = "remote"
 
   config = {

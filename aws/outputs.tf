@@ -3,6 +3,20 @@ output "dns_name" {
   value       = module.alb.lb_dns_name
 }
 
+output "postgres_endpoint" {
+  value = module.postgresql.db_instance_endpoint
+}
+
+output "postgres_username" {
+  value     = module.postgresql.db_instance_username
+  sensitive = true
+}
+
+output "postgres_password" {
+  value     = module.postgresql.db_instance_password
+  sensitive = true
+}
+
 output "kms_recovery_key_id" {
   value = aws_kms_key.recovery.id
 }

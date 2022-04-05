@@ -9,9 +9,9 @@ resource "vault_database_secret_backend_connection" "northwind" {
   allowed_roles = ["dba", "analyst"]
 
   postgresql {
-    connection_url = "postgresql://{{username}}:{{password}}@localhost:16001/postgres?sslmode=disable"
-    username       = "vault"
-    password       = "vault-password"
+    connection_url = "postgresql://{{username}}:{{password}}@${data.terraform_remote_state.aws.outputs.postgres_endpoint}/postgres?sslmode=disable"
+    username       = data.terraform_remote_state.aws.outputs.postgres_username
+    password       = data.terraform_remote_state.aws.outputs.postgres_password
   }
 }
 
