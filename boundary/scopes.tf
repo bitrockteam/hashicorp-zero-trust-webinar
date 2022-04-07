@@ -4,17 +4,27 @@ resource "boundary_scope" "global" {
   scope_id     = "global"
 }
 
+// Org scope
+//
 resource "boundary_scope" "org" {
-  scope_id    = boundary_scope.global.id
-  name        = "organization"
-  description = "Organization scope"
-}
-
-// create a project for core infrastructure
-resource "boundary_scope" "core_infra" {
-  name                     = "core_infra"
-  description              = "Backend Infrastructure project"
-  scope_id                 = boundary_scope.org.id
+  name                     = var.org
+  scope_id                 = boundary_scope.global.id
   auto_create_admin_role   = true
   auto_create_default_role = true
+}
+
+// Project scope
+//
+resource "boundary_scope" "project-prod-support" {
+  name                   = "Production Support"
+  description            = "Project for Production Support"
+  scope_id               = boundary_scope.org.id
+  auto_create_admin_role = true
+}
+
+resource "boundary_scope" "project-northwind-erp" {
+  name                   = "Northwind ERP"
+  description            = "Project for Northwind ERP"
+  scope_id               = boundary_scope.org.id
+  auto_create_admin_role = true
 }

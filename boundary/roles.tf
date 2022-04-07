@@ -24,47 +24,29 @@ resource "boundary_role" "org_anon_listing" {
   principal_ids = ["u_anon"]
 }
 
-# Creates a role in the global scope that's granting administrative access to 
-# resources in the org scope for all backend users
-resource "boundary_role" "org_admin" {
-  scope_id       = boundary_scope.global.id
-  grant_scope_id = boundary_scope.org.id
+
+// Organization
+
+resource "boundary_role" "server-admin" {
+  name           = "Server Admin Role"
+  grant_scope_id = boundary_scope.project-prod-support.id
   grant_strings = [
-    "id=*;type=*;actions=*"
+    "id=${boundary_target.ssh-aws-target.id};actions=*",
+    "id=*;type=session;actions=cancel:self,read"
   ]
-  principal_ids = concat(
-    [for user in boundary_user.backend : user.id],
-    [for user in boundary_user.frontend : user.id],
-  )
+  scope_id      = boundary_scope.org.id
+  principal_ids = [boundary_user.ops.id]
 }
 
-# Adds a read-only role in the global scope granting read-only access
-# to all resources within the org scope and adds principals from the 
-# leadership team to the role
-resource "boundary_role" "org_readonly" {
-  name        = "readonly"
-  description = "Read-only role"
-  principal_ids = [
-    boundary_group.leadership.id
-  ]
+// Project
+//
+resource "boundary_role" "psql-admin" {
+  name           = "PSQL Admin Role"
+  grant_scope_id = boundary_scope.project-prod-support.id
   grant_strings = [
-    "id=*;type=*;actions=read"
+    "id=${boundary_target.psql-target.id};actions=*",
+    "id=*;type=session;actions=cancel:self,read"
   ]
-  scope_id       = boundary_scope.global.id
-  grant_scope_id = boundary_scope.org.id
-}
-
-# Adds an org-level role granting administrative permissions within the core_infra project
-resource "boundary_role" "project_admin" {
-  name           = "core_infra_admin"
-  description    = "Administrator role for core infra"
-  scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.core_infra.id
-  grant_strings = [
-    "id=*;type=*;actions=*"
-  ]
-  principal_ids = concat(
-    [for user in boundary_user.backend : user.id],
-    [for user in boundary_user.frontend : user.id],
-  )
+  scope_id      = boundary_scope.org.id
+  principal_ids = [boundary_user.dbadmin.id]
 }

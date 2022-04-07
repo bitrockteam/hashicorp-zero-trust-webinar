@@ -3,36 +3,42 @@ variable "url" {
   #  default = "http://boundary-demo-controller-ec52c62e6a9979ab.elb.us-east-1.amazonaws.com:9200"
 }
 
-variable "backend_team" {
-  type = set(string)
-  default = [
-    "jim",
-    "mike",
-    "todd",
-  ]
+variable "org" {
+  default = "hashicorp-sg"
 }
 
-variable "frontend_team" {
-  type = set(string)
-  default = [
-    "randy",
-    "susmitha",
-  ]
+
+variable "vault_erp_token_for_boundary" {
+  default = "s.F97xJ6cmvr7RNR9xz38zQtus"
 }
 
-variable "leadership_team" {
-  type = set(string)
-  default = [
-    "jeff",
-    "pete",
-    "jonathan",
-    "malnick"
-  ]
+variable "vault_token_for_boundary" {
+  //default = "s.yF6VlQghXqWEZVIHcgGJGK3X"
+  default = "s.nFcENaw5ffiU9QskFRENuvXG"
 }
 
-variable "target_ips" {
-  type    = set(string)
-  default = []
+variable "vault_fqdn" {
+  default = "http://127.0.0.1:8200"
+}
+
+variable "vault_psql_dba_path" {
+  default = "database/creds/dba"
+}
+
+variable "vault_psql_analyst_path" {
+  default = "database/creds/analyst"
+}
+
+variable "vault_ssh_path" {
+  default = "ssh/sign/ubuntu"
+}
+
+variable "vault_kv_path_aws" {
+  default = "boundary/aws-user"
+}
+
+variable "aws_host" {
+  default = "13.57.35.149"
 }
 
 variable "region" {

@@ -9,3 +9,9 @@ resource "vault_policy" "northwind_database" {
 
   policy = file("./policies/northwind-database-policy.hcl")
 }
+
+resource "vault_policy" "ssh" {
+  name = "ssh"
+
+  policy = file("./policies/ssh-policy.hcl")
+}
