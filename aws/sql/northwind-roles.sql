@@ -10,6 +10,10 @@ begin;
 
   create role northwind_dba noinherit;
   grant all privileges on database northwind to northwind_dba;
+  grant all on schema public to northwind_dba;
+  grant all on all tables in schema public to northwind_dba;
+  grant all on all sequences in schema public to northwind_dba;
+  grant all on all functions in schema public to northwind_dba;
 
 -- CREATE ROLE admin WITH CREATEDB CREATEROLE;
 -- create database vault owner vault;

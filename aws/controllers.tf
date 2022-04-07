@@ -336,4 +336,13 @@ resource "aws_instance" "bastion" {
     source      = "sql"
     destination = "~/"
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt install postgresql-client",
+      "PGPASSWORD=${module.postgresql.db_instance_password} psql -h ${module.postgresql.db_instance_address} -U ${module.postgresql.db_instance_username} -d postgres -c 'CREATE DATABASE IF NOT EXISTS northwind'",
+      "PGPASSWORD=${module.postgresql.db_instance_password} psql -h ${module.postgresql.db_instance_address} -U ${module.postgresql.db_instance_username} -d northwind -f ./sql/northwind-database.sql",
+      "PGPASSWORD=${module.postgresql.db_instance_password} psql -h ${module.postgresql.db_instance_address} -U ${module.postgresql.db_instance_username} -d northwind -f ./sql/northwind-roles.sql",
+    ]
+  }
 }
