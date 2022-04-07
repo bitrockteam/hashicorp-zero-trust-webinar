@@ -9,6 +9,7 @@ variable "org" {
 
 
 variable "vault_erp_token_for_boundary" {
+  default   = null
   sensitive = true
 }
 
