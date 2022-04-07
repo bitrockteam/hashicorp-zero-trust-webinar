@@ -107,3 +107,15 @@ resource "boundary_role" "psql-admin" {
   ]
   principal_ids = [boundary_user.dbadmin.id]
 }
+
+resource "boundary_role" "psql-analyst" {
+  name           = "PSQL Analyst Role"
+  scope_id       = boundary_scope.org.id
+  grant_scope_id = boundary_scope.project-northwind-erp.id
+  grant_strings = [
+    "id=${boundary_target.psql-target.id};actions=*",
+    "id=*;type=session;actions=cancel:self,read",
+    "id=*;type=*;actions=read,list"
+  ]
+  principal_ids = [boundary_user.dbanalyst.id]
+}

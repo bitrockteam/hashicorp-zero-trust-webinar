@@ -6,11 +6,25 @@ resource "boundary_account" "dbadmin" {
   password       = "password"
 }
 
-
 resource "boundary_user" "dbadmin" {
   name        = "dbadmin"
   description = "dbadmin's user resource"
   account_ids = [boundary_account.dbadmin.id]
+  scope_id    = boundary_scope.org.id
+}
+
+resource "boundary_account" "dbanalyst" {
+  auth_method_id = boundary_auth_method.password.id
+  type           = "password"
+  login_name     = "dbanalyst"
+  password       = "password"
+}
+
+
+resource "boundary_user" "dbanalyst" {
+  name        = "dbanalyst"
+  description = "dbanalyst's user resource"
+  account_ids = [boundary_account.dbanalyst.id]
   scope_id    = boundary_scope.org.id
 }
 
