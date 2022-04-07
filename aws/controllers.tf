@@ -279,16 +279,6 @@ data "aws_iam_policy_document" "controller" {
       "${data.aws_s3_bucket.boundary.arn}/*"
     ]
   }
-
-  statement {
-    actions = [
-      "ec2:DescribeInstances"
-    ]
-
-    effect = "Allow"
-
-    resources = ["*"]
-  }
 }
 
 resource "aws_iam_policy" "controller" {

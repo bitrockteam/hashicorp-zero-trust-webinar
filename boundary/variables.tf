@@ -53,3 +53,15 @@ variable "region" {
 variable "kms_key_id" {
   type = string
 }
+
+variable "boundary_access_key_id" {
+  type    = string
+  default = null
+}
+
+variable "boundary_secret_access_key" {
+  type    = string
+  default = null
+}
+
+

@@ -63,3 +63,26 @@ resource "boundary_host_set" "aws" {
     boundary_host.aws-demo.id
   ]
 }
+
+
+resource "boundary_host_catalog_plugin" "aws" {
+  scope_id    = boundary_scope.project-prod-support.id
+  name        = "AWS Plugin"
+  plugin_name = "aws"
+  attributes_json = jsonencode({
+    "disable_credential_rotation" = true
+    "region"                      = var.region
+  })
+  secrets_json = jsonencode({
+    "access_key_id"     = var.boundary_access_key_id != null ? var.boundary_access_key_id : data.terraform_remote_state.aws.outputs.boundary_access_key_id
+    "secret_access_key" = var.boundary_secret_access_key != null ? var.boundary_secret_access_key : data.terraform_remote_state.aws.outputs.boundary_secret_access_key
+  })
+}
+
+resource "boundary_host_set_plugin" "backend_vms" {
+  name            = "backend vm set"
+  host_catalog_id = boundary_host_catalog_plugin.aws.id
+  attributes_json = jsonencode({
+    "filters" = "tag:service-type=backend"
+  })
+}
