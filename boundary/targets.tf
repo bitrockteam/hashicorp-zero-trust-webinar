@@ -7,10 +7,9 @@ resource "boundary_target" "ssh-dynamic-aws-target" {
   host_source_ids = [
     boundary_host_set_plugin.backend_vms.id
   ]
-  #  application_credential_source_ids = [
-  #    //todo
-  #    boundary_credential_library_vault.kv_aws.id
-  #  ]
+  application_credential_source_ids = [
+    boundary_credential_library_vault.ssh_ubuntu.id
+  ]
 }
 
 resource "boundary_target" "psql-dba-target" {
