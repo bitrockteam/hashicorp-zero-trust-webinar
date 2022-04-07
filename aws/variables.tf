@@ -38,12 +38,6 @@ variable "controller_min_size" {
   type        = number
 }
 
-variable "key_name" {
-  default     = ""
-  description = "The name of the key pair"
-  type        = string
-}
-
 variable "private_subnets" {
   default     = []
   description = "List of private subnets"

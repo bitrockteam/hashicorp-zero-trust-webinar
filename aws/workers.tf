@@ -42,15 +42,11 @@ resource "aws_security_group" "worker" {
     to_port     = 9202
   }
 
-  dynamic "ingress" {
-    for_each = var.key_name != "" ? [22] : []
-
-    content {
-      from_port       = 22
-      protocol        = "TCP"
-      security_groups = one(aws_security_group.bastion[*].id)
-      to_port         = 22
-    }
+  ingress {
+    from_port       = 22
+    protocol        = "TCP"
+    security_groups = [aws_security_group.bastion.id]
+    to_port         = 22
   }
 
   name   = "BoundaryWorker"
@@ -68,7 +64,7 @@ module "workers" {
   iam_instance_profile    = aws_iam_instance_profile.worker.arn
   image_id                = local.image_id
   instance_type           = var.worker_instance_type
-  key_name                = var.key_name
+  key_name                = aws_key_pair.bitrock.key_name
   max_size                = var.worker_max_size
   min_size                = var.worker_min_size
   security_groups         = [aws_security_group.worker.id]

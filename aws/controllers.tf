@@ -85,8 +85,6 @@ resource "aws_security_group" "controller" {
 }
 
 resource "aws_security_group_rule" "ssh" {
-  count = var.key_name != "" ? 1 : 0
-
   from_port                = 22
   protocol                 = "TCP"
   security_group_id        = aws_security_group.controller.id
@@ -234,7 +232,7 @@ module "controllers" {
   iam_instance_profile = aws_iam_instance_profile.controller.arn
   image_id             = local.image_id
   instance_type        = var.controller_instance_type
-  key_name             = var.key_name
+  key_name             = aws_key_pair.bitrock.key_name
   max_size             = var.controller_max_size
   min_size             = var.controller_min_size
   security_groups      = [aws_security_group.controller.id]
@@ -304,7 +302,6 @@ resource "aws_iam_instance_profile" "controller" {
 }
 
 resource "aws_security_group" "bastion" {
-  count = var.key_name != "" ? 1 : 0
 
   egress {
     cidr_blocks = ["0.0.0.0/0"]
@@ -326,13 +323,12 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_instance" "bastion" {
-  count = var.key_name != "" ? 1 : 0
 
   ami                         = local.image_id
   associate_public_ip_address = true
   instance_type               = "t3.micro"
-  key_name                    = var.key_name
-  subnet_id                   = var.public_subnets[0]
+  key_name                    = aws_key_pair.bitrock.key_name
+  subnet_id                   = local.public_subnets[0]
   tags                        = merge(var.tags, { Name = "Boundary Bastion" })
-  vpc_security_group_ids      = [one(aws_security_group.bastion[*].id)]
+  vpc_security_group_ids      = [aws_security_group.bastion.id]
 }
