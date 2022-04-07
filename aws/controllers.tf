@@ -115,7 +115,7 @@ resource "aws_security_group" "postgresql" {
   ingress {
     from_port       = 5432
     protocol        = "TCP"
-    security_groups = [aws_security_group.controller.id, aws_security_group.internal_vault.id, aws_security_group.worker.id]
+    security_groups = [aws_security_group.controller.id, aws_security_group.internal_vault.id, aws_security_group.worker.id, aws_security_group.bastion.id]
     to_port         = 5432
   }
 
