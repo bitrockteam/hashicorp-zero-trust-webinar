@@ -331,4 +331,9 @@ resource "aws_instance" "bastion" {
   subnet_id                   = local.public_subnets[0]
   tags                        = merge(var.tags, { Name = "Boundary Bastion" })
   vpc_security_group_ids      = [aws_security_group.bastion.id]
+
+  provisioner "file" {
+    source      = "sql"
+    destination = "~/"
+  }
 }
