@@ -14,8 +14,8 @@ resource "vault_ssh_secret_backend_role" "ubuntu" {
   key_type                = "ca"
   allow_user_certificates = true
   default_user            = "ubuntu"
-  allowed_users           = "default"
-  ttl                     = "60m"
+  allowed_users           = "ubuntu"
+  ttl                     = "3600"
   default_extensions = {
     "permit-pty" : ""
   }
@@ -34,8 +34,8 @@ resource "local_file" "ssh_key" {
 }
 
 
-resource "vault_generic_secret" "ssh" {
-  path = vault_mount.ssh.path
+resource "vault_generic_secret" "ssh_sign" {
+  path = "${vault_mount.ssh.path}/sign/${vault_ssh_secret_backend_role.ubuntu.name}"
 
   disable_read = false
 

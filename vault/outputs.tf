@@ -13,5 +13,6 @@ output "boundary_ssh_key_pub" {
 }
 
 output "ssh" {
-  value = vault_generic_secret.ssh
+  value     = vault_generic_secret.ssh_sign
+  sensitive = true
 }
