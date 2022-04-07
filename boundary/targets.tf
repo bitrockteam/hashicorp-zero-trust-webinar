@@ -19,7 +19,7 @@ resource "boundary_target" "psql-dba-target" {
   scope_id                 = boundary_scope.project-prod-support.id
   session_connection_limit = -1
   host_source_ids = [
-    boundary_host_set.local.id
+    boundary_host_set.rds.id
   ]
   application_credential_source_ids = [
     boundary_credential_library_vault.psql_dba.id

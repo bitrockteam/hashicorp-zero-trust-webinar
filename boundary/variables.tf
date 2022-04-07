@@ -42,6 +42,10 @@ variable "aws_host" {
   default = "13.57.35.149"
 }
 
+variable "rds_host" {
+  default = null
+}
+
 variable "region" {
   type = string
 }

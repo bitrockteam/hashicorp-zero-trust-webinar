@@ -23,6 +23,22 @@ resource "boundary_host" "localhost" {
   host_catalog_id = boundary_host_catalog.my-host-catalog.id
 }
 
+resource "boundary_host" "rds" {
+  name            = "RDS"
+  type            = "static"
+  address         = var.rds_host != null ? var.rds_host : data.terraform_remote_state.aws.outputs.db_instance_address
+  host_catalog_id = boundary_host_catalog.my-host-catalog.id
+}
+
+resource "boundary_host_set" "rds" {
+  name            = "rds set"
+  type            = "static"
+  host_catalog_id = boundary_host_catalog.my-host-catalog.id
+  host_ids = [
+    boundary_host.rds.id
+  ]
+}
+
 resource "boundary_host_set" "local" {
   name            = "Local hosts set"
   type            = "static"

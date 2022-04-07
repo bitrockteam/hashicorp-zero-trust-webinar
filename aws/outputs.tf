@@ -7,6 +7,10 @@ output "postgres_endpoint" {
   value = module.postgresql.db_instance_endpoint
 }
 
+output "db_instance_address" {
+  value = module.postgresql.db_instance_address
+}
+
 output "postgres_username" {
   value     = module.postgresql.db_instance_username
   sensitive = true
