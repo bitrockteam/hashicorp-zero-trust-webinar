@@ -12,7 +12,7 @@ resource "boundary_credential_store_vault" "vault-erp" {
   name        = "ERP Vault Creds Store"
   description = "ERP Vault credential store!"
   address     = var.vault_fqdn
-  token       = var.vault_erp_token_for_boundary != null ? var.vault_erp_token_for_boundary : data.terraform_remote_state.vault.outputs.boundary_vault_token
+  token       = var.vault_erp_token_for_boundary != null ? var.vault_erp_token_for_boundary : data.terraform_remote_state.vault.outputs.boundary_vault_erp_token
   scope_id    = boundary_scope.project-northwind-erp.id
 }
 
