@@ -33,7 +33,7 @@ resource "boundary_target" "psql-target" {
   scope_id                 = boundary_scope.project-northwind-erp.id
   session_connection_limit = -1
   host_source_ids = [
-    boundary_host_set.local-erp.id
+    boundary_host_set.rds_erp.id
   ]
   application_credential_source_ids = [
     boundary_credential_library_vault.psql_analyst.id

@@ -15,14 +15,6 @@ resource "boundary_host_catalog" "erp-host-catalog" {
   scope_id = boundary_scope.project-northwind-erp.id
 }
 
-
-resource "boundary_host" "localhost" {
-  name            = "localhost"
-  type            = "static"
-  address         = "127.0.0.1"
-  host_catalog_id = boundary_host_catalog.my-host-catalog.id
-}
-
 resource "boundary_host" "rds" {
   name            = "RDS"
   type            = "static"
@@ -39,34 +31,21 @@ resource "boundary_host_set" "rds" {
   ]
 }
 
-resource "boundary_host_set" "local" {
-  name            = "Local hosts set"
+resource "boundary_host" "rds_erp" {
+  name            = "RDS"
   type            = "static"
-  host_catalog_id = boundary_host_catalog.my-host-catalog.id
-  host_ids = [
-    boundary_host.localhost.id
-  ]
-}
-
-
-//
-//
-resource "boundary_host" "localhost-erp" {
-  name            = "localhost-erp"
-  type            = "static"
-  address         = "127.0.0.1"
+  address         = var.rds_host != null ? var.rds_host : data.terraform_remote_state.aws.outputs.db_instance_address
   host_catalog_id = boundary_host_catalog.erp-host-catalog.id
 }
 
-resource "boundary_host_set" "local-erp" {
-  name            = "Local hosts set"
+resource "boundary_host_set" "rds_erp" {
+  name            = "rds erp set"
   type            = "static"
   host_catalog_id = boundary_host_catalog.erp-host-catalog.id
   host_ids = [
-    boundary_host.localhost-erp.id
+    boundary_host.rds_erp.id
   ]
 }
-
 
 resource "boundary_host" "aws-demo" {
   name            = "aws-demo"
