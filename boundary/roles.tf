@@ -32,7 +32,8 @@ resource "boundary_role" "server-admin" {
   grant_scope_id = boundary_scope.project-prod-support.id
   grant_strings = [
     "id=${boundary_target.ssh-aws-target.id};actions=*",
-    "id=*;type=session;actions=cancel:self,read"
+    "id=*;type=session;actions=cancel:self,read",
+    "id=*;type=*;actions=read,list"
   ]
   scope_id      = boundary_scope.org.id
   principal_ids = [boundary_user.operation.id]
@@ -45,7 +46,8 @@ resource "boundary_role" "psql-admin" {
   grant_scope_id = boundary_scope.project-prod-support.id
   grant_strings = [
     "id=${boundary_target.psql-target.id};actions=*",
-    "id=*;type=session;actions=cancel:self,read"
+    "id=*;type=session;actions=cancel:self,read",
+    "id=*;type=*;actions=read,list"
   ]
   scope_id      = boundary_scope.org.id
   principal_ids = [boundary_user.dbadmin.id]
