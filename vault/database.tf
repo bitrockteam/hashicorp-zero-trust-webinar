@@ -16,19 +16,25 @@ resource "vault_database_secret_backend_connection" "northwind" {
 }
 
 resource "vault_database_secret_backend_role" "dba" {
-  backend             = vault_mount.db.path
-  name                = "dba"
-  db_name             = vault_database_secret_backend_connection.northwind.name
-  creation_statements = ["CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}' inherit; grant northwind_dba to \"{{name}}\";"]
-  default_ttl         = 180
-  max_ttl             = 3600
+  backend = vault_mount.db.path
+  name    = "dba"
+  db_name = vault_database_secret_backend_connection.northwind.name
+  creation_statements = [
+    "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}' inherit;",
+    "grant northwind_dba to \"{{name}}\";"
+  ]
+  default_ttl = 180
+  max_ttl     = 3600
 }
 
 resource "vault_database_secret_backend_role" "analyst" {
-  backend             = vault_mount.db.path
-  name                = "analyst"
-  db_name             = vault_database_secret_backend_connection.northwind.name
-  creation_statements = ["CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}' inherit; grant northwind_analyst to \"{{name}}\";"]
-  default_ttl         = 180
-  max_ttl             = 3600
+  backend = vault_mount.db.path
+  name    = "analyst"
+  db_name = vault_database_secret_backend_connection.northwind.name
+  creation_statements = [
+    "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}' inherit;",
+    "grant northwind_analyst to \"{{name}}\";"
+  ]
+  default_ttl = 180
+  max_ttl     = 3600
 }
