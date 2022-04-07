@@ -19,7 +19,6 @@ worker {
 	name = "demo-worker-{{v1.local_hostname}}"
 	description = "A default worker created for demonstration"
 	controllers = ${controllers}
-  ]
 }
 
 disable_mlock = true
