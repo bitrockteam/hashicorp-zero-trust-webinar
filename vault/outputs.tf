@@ -9,10 +9,14 @@ output "boundary_vault_erp_token" {
 }
 
 output "boundary_ssh_key_pub" {
-  value = tls_private_key.boundary_ssh_key.public_key_pem
+  value = trim(tls_private_key.boundary_ssh_key.public_key_openssh, "\n")
 }
 
-output "ssh" {
-  value     = vault_generic_secret.ssh_sign
+output "boundary_ssh_key" {
+  value     = tls_private_key.boundary_ssh_key.private_key_pem
   sensitive = true
+}
+
+output "boundary_signed_cert" {
+  value = data.local_file.boundarydemo-signed-cert.content
 }
