@@ -15,7 +15,7 @@ resource "boundary_target" "ssh-aws-target" {
 resource "boundary_target" "psql-dba-target" {
   name                     = "PSQL DBA Target"
   type                     = "tcp"
-  default_port             = "55432"
+  default_port             = "5432"
   scope_id                 = boundary_scope.project-prod-support.id
   session_connection_limit = -1
   host_source_ids = [
@@ -29,7 +29,7 @@ resource "boundary_target" "psql-dba-target" {
 resource "boundary_target" "psql-target" {
   name                     = "PSQL Analyst Target"
   type                     = "tcp"
-  default_port             = "55432"
+  default_port             = "5432"
   scope_id                 = boundary_scope.project-northwind-erp.id
   session_connection_limit = -1
   host_source_ids = [
