@@ -25,6 +25,20 @@ resource "boundary_role" "org_anon_listing" {
 }
 
 
+# Creates a role in the global scope that's granting administrative access to
+# resources in the org scope for admin user
+resource "boundary_role" "org_admin" {
+  scope_id       = boundary_scope.global.id
+  grant_scope_id = boundary_scope.org.id
+  grant_strings = [
+    "id=*;type=*;actions=*"
+  ]
+  principal_ids = [
+    boundary_user.admin.id
+  ]
+}
+
+
 // Organization
 
 resource "boundary_role" "server-admin" {
