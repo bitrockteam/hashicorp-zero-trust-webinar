@@ -35,7 +35,7 @@ resource "boundary_role" "server-admin" {
     "id=*;type=session;actions=cancel:self,read"
   ]
   scope_id      = boundary_scope.org.id
-  principal_ids = [boundary_user.ops.id]
+  principal_ids = [boundary_user.operation.id]
 }
 
 // Project

@@ -14,18 +14,18 @@ resource "boundary_user" "dbadmin" {
   scope_id    = boundary_scope.org.id
 }
 
-resource "boundary_account" "ops" {
+resource "boundary_account" "operation" {
   auth_method_id = boundary_auth_method.password.id
   type           = "password"
-  login_name     = "ops"
+  login_name     = "operation"
   password       = "password"
 }
 
 
-resource "boundary_user" "ops" {
-  name        = "ops"
-  description = "ops's user resource"
-  account_ids = [boundary_account.ops.id]
+resource "boundary_user" "operation" {
+  name        = "operation"
+  description = "operation's user resource"
+  account_ids = [boundary_account.operation.id]
   scope_id    = boundary_scope.org.id
 }
 

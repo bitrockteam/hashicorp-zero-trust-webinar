@@ -9,12 +9,12 @@ variable "org" {
 
 
 variable "vault_erp_token_for_boundary" {
-  default = "s.F97xJ6cmvr7RNR9xz38zQtus"
+  sensitive = true
 }
 
 variable "vault_token_for_boundary" {
-  //default = "s.yF6VlQghXqWEZVIHcgGJGK3X"
-  default = "s.nFcENaw5ffiU9QskFRENuvXG"
+  default   = null
+  sensitive = true
 }
 
 variable "vault_fqdn" {
