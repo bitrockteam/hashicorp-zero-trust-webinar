@@ -332,6 +332,13 @@ resource "aws_instance" "bastion" {
   tags                        = merge(var.tags, { Name = "Boundary Bastion" })
   vpc_security_group_ids      = [aws_security_group.bastion.id]
 
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = tls_private_key.ssh_key.private_key_pem
+    host        = self.public_ip
+  }
+
   provisioner "file" {
     source      = "sql"
     destination = "~/"
