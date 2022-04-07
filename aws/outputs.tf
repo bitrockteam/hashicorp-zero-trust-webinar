@@ -30,6 +30,15 @@ output "ssh_key" {
   sensitive = true
 }
 
+output "ssh_ca_key" {
+  value     = tls_private_key.ssh_ca_key.private_key_pem
+  sensitive = true
+}
+
+output "ssh_ca_key_pub" {
+  value = tls_private_key.ssh_ca_key.public_key_openssh
+}
+
 output "vault_token" {
   value     = module.vault_cluster.vault_token
   sensitive = true

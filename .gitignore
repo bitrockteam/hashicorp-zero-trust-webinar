@@ -109,3 +109,5 @@ terraform.rc
 
 .idea
 ssh-key.pem
+boundarydemo
+boundarydemo-signed-cert.pub

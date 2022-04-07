@@ -28,6 +28,33 @@ resource "aws_security_group" "boundary-ssh" {
   vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
 }
 
+
+resource "tls_private_key" "ssh_ca_key" {
+  algorithm = "RSA"
+  rsa_bits  = "4096"
+}
+
+locals {
+  user_data = {
+    write_files = [
+      {
+        content     = base64encode(tls_private_key.ssh_ca_key.public_key_pem)
+        encoding    = "b64"
+        owner       = "root:root"
+        path        = "/etc/ssh/trusted-user-ca-keys.pem"
+        permissions = "0600"
+      }
+    ]
+
+    runcmd = concat(
+      [
+        "echo \"TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem\" >> /etc/ssh/sshd_config",
+        "systemctl restart sshd"
+      ]
+    )
+  }
+}
+
 resource "aws_instance" "boundary_instance" {
   count = length(var.instances)
 
@@ -36,4 +63,12 @@ resource "aws_instance" "boundary_instance" {
   subnet_id              = local.private_subnets[count.index]
   vpc_security_group_ids = [aws_security_group.boundary-ssh.id]
   tags                   = var.vm_tags[count.index]
+
+
+  user_data_base64 = base64encode(<<EOF
+## template: jinja
+#cloud-config
+${yamlencode(local.user_data)}
+EOF
+  )
 }

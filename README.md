@@ -13,6 +13,8 @@ https://learn.hashicorp.com/tutorials/boundary/aws-host-catalogs?in=boundary/con
 https://learn.hashicorp.com/tutorials/boundary/vault-cred-brokering-quickstart?in=boundary/configuration
 
 
+https://github.com/jasonwalsh/terraform-aws-boundary
+
 Caravan
 
 https://github.com/hashicorp/learn-boundary-vault-quickstart

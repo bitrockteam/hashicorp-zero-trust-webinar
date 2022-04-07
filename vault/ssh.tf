@@ -4,8 +4,9 @@ resource "vault_mount" "ssh" {
 }
 
 resource "vault_ssh_secret_backend_ca" "foo" {
-  backend              = vault_mount.ssh.path
-  generate_signing_key = true
+  backend     = vault_mount.ssh.path
+  private_key = data.terraform_remote_state.aws.outputs.ssh_ca_key
+  public_key  = data.terraform_remote_state.aws.outputs.ssh_ca_key_pub
 }
 
 resource "vault_ssh_secret_backend_role" "ubuntu" {
@@ -44,7 +45,8 @@ resource "local_file" "public_ssh_key" {
 # https://github.com/hashicorp/boundary/issues/1768
 resource "null_resource" "ssh_sign" {
   triggers = {
-    pub = md5(local_file.public_ssh_key.content)
+    pub        = md5(local_file.public_ssh_key.content)
+    always_run = timestamp()
   }
 
   provisioner "local-exec" {
