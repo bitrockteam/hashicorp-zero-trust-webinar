@@ -34,11 +34,22 @@ resource "boundary_credential_library_vault" "psql_analyst" {
 }
 
 
-resource "boundary_credential_library_vault" "kv_aws" {
-  name                = "KV AWS SSH"
-  description         = "KV AWS"
+locals {
+  ssh_pub_key = var.vault_public_key != null ? var.vault_public_key : data.terraform_remote_state.vault.outputs.boundary_ssh_key_pub
+}
+
+## public_key below refers to public_key generated from ssh-keygen
+# https://github.com/hashicorp/boundary/issues/1768
+resource "boundary_credential_library_vault" "ssh_ubuntu" {
+  name                = "SSH Ubuntu Library"
+  description         = "SSH Ubuntu"
   credential_store_id = boundary_credential_store_vault.vault.id
-  path                = var.vault_kv_path_aws
-  http_method         = "GET"
+  path                = var.vault_ssh_path
+  http_method         = "POST"
+  http_request_body   = <<EOT
+    {
+      "public_key": "${local.ssh_pub_key}"
+    }
+    EOT
 }
 

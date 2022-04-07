@@ -34,12 +34,8 @@ variable "vault_ssh_path" {
   default = "ssh/sign/ubuntu"
 }
 
-variable "vault_kv_path_aws" {
-  default = "boundary/aws-user"
-}
-
-variable "aws_host" {
-  default = "13.57.35.149"
+variable "vault_public_key" {
+  default = null
 }
 
 variable "rds_host" {

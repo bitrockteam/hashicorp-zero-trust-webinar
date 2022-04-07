@@ -47,23 +47,6 @@ resource "boundary_host_set" "rds_erp" {
   ]
 }
 
-resource "boundary_host" "aws-demo" {
-  name            = "aws-demo"
-  type            = "static"
-  address         = var.aws_host
-  host_catalog_id = boundary_host_catalog.my-host-catalog.id
-}
-
-
-resource "boundary_host_set" "aws" {
-  name            = "AWS hosts set"
-  type            = "static"
-  host_catalog_id = boundary_host_catalog.my-host-catalog.id
-  host_ids = [
-    boundary_host.aws-demo.id
-  ]
-}
-
 
 resource "boundary_host_catalog_plugin" "aws" {
   scope_id    = boundary_scope.project-prod-support.id

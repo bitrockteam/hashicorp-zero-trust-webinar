@@ -1,6 +1,6 @@
 output "target-ids" {
   value = [
-    "AWS VM: ${boundary_target.ssh-aws-target.id}",
+    "AWS VM: ${boundary_target.ssh-dynamic-aws-target.id}",
     "POSTGRES-DBA: ${boundary_target.psql-dba-target.id}",
     "POSTGRES: ${boundary_target.psql-target.id}",
   ]
