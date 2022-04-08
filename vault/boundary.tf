@@ -1,6 +1,6 @@
 resource "vault_token" "boundary" {
   no_default_policy = true
-  policies          = ["boundary-controller", "northwind-database", "ssh-policy"]
+  policies          = ["boundary-controller", "northwind-database", "ssh"]
 
   renewable = true
   no_parent = true
@@ -9,7 +9,7 @@ resource "vault_token" "boundary" {
 
 resource "vault_token" "erp" {
   no_default_policy = true
-  policies          = ["boundary-controller", "northwind-database", "ssh-policy"]
+  policies          = ["boundary-controller", "northwind-database", "ssh"]
 
   renewable = true
   no_parent = true
