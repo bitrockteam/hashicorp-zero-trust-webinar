@@ -49,6 +49,8 @@ locals {
     runcmd = concat(
       [
         "echo \"TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pub\" >> /etc/ssh/sshd_config",
+        "echo \"CASignatureAlgorithms ^ssh-rsa\"  >> /etc/ssh/sshd_config",
+        "echo \"PubkeyAuthentication yes\"  >> /etc/ssh/sshd_config",
         "systemctl restart sshd"
       ]
     )

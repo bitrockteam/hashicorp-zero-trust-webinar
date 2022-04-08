@@ -31,7 +31,8 @@ resource "boundary_role" "org_readonly" {
   description = "Read-only role"
   principal_ids = [
     boundary_user.operation.id,
-    boundary_user.dbadmin.id
+    boundary_user.dbadmin.id,
+    boundary_user.dbanalyst.id
   ]
   grant_strings = [
     "id=*;type=*;actions=read"
