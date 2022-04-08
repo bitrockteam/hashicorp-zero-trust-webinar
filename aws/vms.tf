@@ -58,9 +58,10 @@ locals {
 resource "aws_instance" "boundary_instance" {
   count = length(var.instances)
 
-  ami                    = "ami-083602cee93914c0c"
+  ami                    = local.image_id
   instance_type          = "t3.micro"
   subnet_id              = local.private_subnets[count.index]
+  key_name               = aws_key_pair.bitrock.key_name
   vpc_security_group_ids = [aws_security_group.boundary-ssh.id]
   tags                   = var.vm_tags[count.index]
 
