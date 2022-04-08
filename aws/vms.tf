@@ -38,17 +38,17 @@ locals {
   user_data = {
     write_files = [
       {
-        content     = base64encode(tls_private_key.ssh_ca_key.public_key_pem)
+        content     = base64encode(tls_private_key.ssh_ca_key.public_key_openssh)
         encoding    = "b64"
         owner       = "root:root"
-        path        = "/etc/ssh/trusted-user-ca-keys.pem"
+        path        = "/etc/ssh/trusted-user-ca-keys.pub"
         permissions = "0600"
       }
     ]
 
     runcmd = concat(
       [
-        "echo \"TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem\" >> /etc/ssh/sshd_config",
+        "echo \"TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pub\" >> /etc/ssh/sshd_config",
         "systemctl restart sshd"
       ]
     )
