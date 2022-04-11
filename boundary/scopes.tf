@@ -15,14 +15,14 @@ resource "boundary_scope" "org" {
 
 // Project scope
 //
-resource "boundary_scope" "project-prod-support" {
+resource "boundary_scope" "project_prod_support" {
   name                   = "Production Support"
   description            = "Project for Production Support"
   scope_id               = boundary_scope.org.id
   auto_create_admin_role = true
 }
 
-resource "boundary_scope" "project-northwind-erp" {
+resource "boundary_scope" "project_northwind_erp" {
   name                   = "Northwind ERP"
   description            = "Project for Northwind ERP"
   scope_id               = boundary_scope.org.id

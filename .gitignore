@@ -110,3 +110,5 @@ terraform.rc
 .idea
 ssh-key.pem
 boundarydemo*
+authz.json
+

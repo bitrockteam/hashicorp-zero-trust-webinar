@@ -61,7 +61,7 @@ resource "boundary_role" "project_erp_admin" {
   name           = "project_erp_admin"
   description    = "Administrator role for northwind erp"
   scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project-northwind-erp.id
+  grant_scope_id = boundary_scope.project_northwind_erp.id
   grant_strings = [
     "id=*;type=*;actions=*"
   ]
@@ -74,7 +74,7 @@ resource "boundary_role" "project_prod_support" {
   name           = "project_prod_support"
   description    = "Administrator role for prod support"
   scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project-prod-support.id
+  grant_scope_id = boundary_scope.project_prod_support.id
   grant_strings = [
     "id=*;type=*;actions=*"
   ]
@@ -86,7 +86,7 @@ resource "boundary_role" "project_prod_support" {
 resource "boundary_role" "server-admin" {
   name           = "Server Admin Role"
   scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project-prod-support.id
+  grant_scope_id = boundary_scope.project_prod_support.id
   grant_strings = [
     "id=${boundary_target.ssh-dynamic-aws-target.id};actions=*",
     "id=*;type=session;actions=cancel:self,read",
@@ -100,7 +100,7 @@ resource "boundary_role" "server-admin" {
 resource "boundary_role" "psql-admin" {
   name           = "PSQL Admin Role"
   scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project-prod-support.id
+  grant_scope_id = boundary_scope.project_prod_support.id
   grant_strings = [
     "id=${boundary_target.psql-dba-target.id};actions=*",
     "id=*;type=session;actions=cancel:self,read",
@@ -112,7 +112,7 @@ resource "boundary_role" "psql-admin" {
 resource "boundary_role" "psql-analyst" {
   name           = "PSQL Analyst Role"
   scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project-northwind-erp.id
+  grant_scope_id = boundary_scope.project_northwind_erp.id
   grant_strings = [
     "id=${boundary_target.psql-target.id};actions=*",
     "id=*;type=session;actions=cancel:self,read",

@@ -1,55 +1,49 @@
 // Prod Support
 //
-resource "boundary_host_catalog" "my-host-catalog" {
+resource "boundary_host_catalog_static" "my_host_catalog" {
   name     = "SG Host Catalog"
-  type     = "static"
-  scope_id = boundary_scope.project-prod-support.id
+  scope_id = boundary_scope.project_prod_support.id
   //scope_id = boundary_scope.org.id
 }
 
 // Northwind ERP
 //
-resource "boundary_host_catalog" "erp-host-catalog" {
+resource "boundary_host_catalog_static" "erp_host_catalog" {
   name     = "ERP Host Catalog"
-  type     = "static"
-  scope_id = boundary_scope.project-northwind-erp.id
+  scope_id = boundary_scope.project_northwind_erp.id
 }
 
-resource "boundary_host" "rds" {
+resource "boundary_host_static" "rds" {
   name            = "RDS"
-  type            = "static"
   address         = var.rds_host != null ? var.rds_host : data.terraform_remote_state.aws.outputs.db_instance_address
-  host_catalog_id = boundary_host_catalog.my-host-catalog.id
+  host_catalog_id = boundary_host_catalog_static.my_host_catalog.id
 }
 
-resource "boundary_host_set" "rds" {
+resource "boundary_host_set_static" "rds" {
   name            = "rds set"
-  type            = "static"
-  host_catalog_id = boundary_host_catalog.my-host-catalog.id
+  host_catalog_id = boundary_host_catalog_static.my_host_catalog.id
   host_ids = [
-    boundary_host.rds.id
+    boundary_host_static.rds.id
   ]
 }
 
-resource "boundary_host" "rds_erp" {
+resource "boundary_host_static" "rds_erp" {
   name            = "RDS"
-  type            = "static"
   address         = var.rds_host != null ? var.rds_host : data.terraform_remote_state.aws.outputs.db_instance_address
-  host_catalog_id = boundary_host_catalog.erp-host-catalog.id
+  host_catalog_id = boundary_host_catalog_static.erp_host_catalog.id
 }
 
-resource "boundary_host_set" "rds_erp" {
+resource "boundary_host_set_static" "rds_erp" {
   name            = "rds erp set"
-  type            = "static"
-  host_catalog_id = boundary_host_catalog.erp-host-catalog.id
+  host_catalog_id = boundary_host_catalog_static.erp_host_catalog.id
   host_ids = [
-    boundary_host.rds_erp.id
+    boundary_host_static.rds_erp.id
   ]
 }
 
 
 resource "boundary_host_catalog_plugin" "aws" {
-  scope_id    = boundary_scope.project-prod-support.id
+  scope_id    = boundary_scope.project_prod_support.id
   name        = "AWS Plugin"
   plugin_name = "aws"
   attributes_json = jsonencode({
