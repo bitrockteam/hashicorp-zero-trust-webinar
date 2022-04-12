@@ -33,11 +33,6 @@ resource "boundary_credential_library_vault" "psql_analyst" {
   http_method         = "GET"
 }
 
-
-locals {
-  ssh_pub_key = var.vault_public_key != null ? var.vault_public_key : data.terraform_remote_state.vault.outputs.boundary_ssh_key_pub
-}
-
 ## public_key below refers to public_key generated from ssh-keygen
 # https://github.com/hashicorp/boundary/issues/1768
 resource "boundary_credential_library_vault" "ssh_ubuntu" {
@@ -48,7 +43,7 @@ resource "boundary_credential_library_vault" "ssh_ubuntu" {
   http_method         = "POST"
   http_request_body   = <<EOT
     {
-      "public_key": "${local.ssh_pub_key}"
+      "public_key": "${trim(tls_private_key.boundary_ssh_key.public_key_openssh, "\n")}"
     }
     EOT
 }

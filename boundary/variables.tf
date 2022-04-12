@@ -35,10 +35,6 @@ variable "vault_ssh_path" {
   default = "ssh/sign/ubuntu"
 }
 
-variable "vault_public_key" {
-  default = null
-}
-
 variable "rds_host" {
   default = null
 }
@@ -48,7 +44,8 @@ variable "region" {
 }
 
 variable "kms_key_id" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "boundary_access_key_id" {
