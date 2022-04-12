@@ -120,9 +120,9 @@ resource "aws_instance" "boundary_otp_instance" {
 
   ami                    = local.image_id
   instance_type          = "t3.micro"
-  subnet_id              = local.public_subnets[2]
+  subnet_id              = local.private_subnets[2]
   key_name               = aws_key_pair.bitrock.key_name
-  vpc_security_group_ids = [aws_security_group.boundary-ssh.id]
+  vpc_security_group_ids = [aws_security_group.boundary-otp-ssh.id]
   tags                   = { "Name" : "boundary-3-prod", "service-type" : "backend", "application" : "otp" }
 
 
@@ -132,4 +132,29 @@ resource "aws_instance" "boundary_otp_instance" {
 ${yamlencode(local.otp_user_data)}
 EOF
   )
+}
+
+resource "aws_security_group" "boundary-otp-ssh" {
+  name        = "boundary_allow_otp_ssh"
+  description = "Allow SSH inbound traffic"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [module.vpc.vpc_cidr_block]
+  }
+
+  tags   = var.tags
+  vpc_id = coalesce(var.vpc_id, module.vpc.vpc_id)
+}
+
+
+resource "aws_security_group_rule" "otp_egress" {
+  cidr_blocks       = ["0.0.0.0/0"]
+  from_port         = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.boundary-otp-ssh.id
+  to_port           = 0
+  type              = "egress"
 }
