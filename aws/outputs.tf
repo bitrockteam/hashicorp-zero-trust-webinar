@@ -60,3 +60,7 @@ output "boundary_secret_access_key" {
   value     = aws_iam_access_key.boundary.secret
   sensitive = true
 }
+
+output "otp_vm_private_ip" {
+  value = aws_instance.boundary_otp_instance.private_ip
+}

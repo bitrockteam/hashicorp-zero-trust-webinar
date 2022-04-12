@@ -40,6 +40,11 @@ resource "boundary_credential_library_vault" "otp_ssh_ubuntu" {
   credential_store_id = boundary_credential_store_vault.vault.id
   path                = var.vault_ssh_otp_path
   http_method         = "POST"
+  http_request_body   = <<EOT
+    {
+      "ip": "${data.terraform_remote_state.aws.outputs.otp_vm_private_ip}"
+    }
+    EOT
 }
 
 ## public_key below refers to public_key generated from ssh-keygen
