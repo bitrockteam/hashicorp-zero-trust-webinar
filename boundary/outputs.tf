@@ -15,3 +15,12 @@ output "auth-method" {
     "PASSWORD: ${boundary_auth_method.password.id}"
   ]
 }
+
+output "boundary_ssh_key_pub" {
+  value = trim(tls_private_key.boundary_ssh_key.public_key_openssh, "\n")
+}
+
+output "boundary_ssh_key" {
+  value     = tls_private_key.boundary_ssh_key.private_key_pem
+  sensitive = true
+}
