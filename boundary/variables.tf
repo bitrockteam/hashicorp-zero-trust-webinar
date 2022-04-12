@@ -35,6 +35,10 @@ variable "vault_ssh_path" {
   default = "ssh/sign/ubuntu"
 }
 
+variable "vault_ssh_otp_path" {
+  default = "ssh/creds/otp"
+}
+
 variable "rds_host" {
   default = null
 }

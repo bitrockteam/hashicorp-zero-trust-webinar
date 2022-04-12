@@ -89,6 +89,7 @@ resource "boundary_role" "server-admin" {
   grant_scope_id = boundary_scope.project_prod_support.id
   grant_strings = [
     "id=${boundary_target.ssh-dynamic-aws-target.id};actions=*",
+    "id=${boundary_target.ssh_otp_dynamic_aws.id};actions=*",
     "id=*;type=session;actions=cancel:self,read",
     "id=*;type=*;actions=read,list"
   ]

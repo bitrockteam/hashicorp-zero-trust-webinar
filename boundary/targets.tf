@@ -12,6 +12,19 @@ resource "boundary_target" "ssh-dynamic-aws-target" {
   ]
 }
 
+resource "boundary_target" "ssh_otp_dynamic_aws" {
+  name         = "SSH OTP Dynamic AWS Target"
+  type         = "tcp"
+  default_port = "22"
+  scope_id     = boundary_scope.project_prod_support.id
+  host_source_ids = [
+    boundary_host_set_plugin.otp_vm.id
+  ]
+  application_credential_source_ids = [
+    boundary_credential_library_vault.otp_ssh_ubuntu.id
+  ]
+}
+
 resource "boundary_target" "psql-dba-target" {
   name                     = "PSQL DBA Target"
   type                     = "tcp"

@@ -66,3 +66,14 @@ resource "boundary_host_set_plugin" "backend_vms" {
     ]
   })
 }
+
+resource "boundary_host_set_plugin" "otp_vm" {
+  name            = "otp vm set"
+  host_catalog_id = boundary_host_catalog_plugin.aws.id
+  attributes_json = jsonencode({
+    "filters" = [
+      "tag:service-type=backend",
+      "tag:application=otp"
+    ]
+  })
+}

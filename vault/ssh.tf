@@ -23,6 +23,15 @@ resource "vault_ssh_secret_backend_role" "ubuntu" {
 
 }
 
+resource "vault_ssh_secret_backend_role" "otp" {
+  name          = "otp"
+  backend       = vault_mount.ssh.path
+  key_type      = "otp"
+  default_user  = "ubuntu"
+  allowed_users = "ubuntu"
+  cidr_list     = "0.0.0.0/0"
+}
+
 #
 #resource "null_resource" "ssh_sign" {
 #  triggers = {

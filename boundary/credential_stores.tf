@@ -33,6 +33,15 @@ resource "boundary_credential_library_vault" "psql_analyst" {
   http_method         = "GET"
 }
 
+# https://github.com/hashicorp/boundary/issues/1764
+resource "boundary_credential_library_vault" "otp_ssh_ubuntu" {
+  name                = "OTP SSH Ubuntu Library"
+  description         = "OTP SSH Ubuntu"
+  credential_store_id = boundary_credential_store_vault.vault.id
+  path                = var.vault_ssh_otp_path
+  http_method         = "POST"
+}
+
 ## public_key below refers to public_key generated from ssh-keygen
 # https://github.com/hashicorp/boundary/issues/1768
 resource "boundary_credential_library_vault" "ssh_ubuntu" {
@@ -47,4 +56,3 @@ resource "boundary_credential_library_vault" "ssh_ubuntu" {
     }
     EOT
 }
-

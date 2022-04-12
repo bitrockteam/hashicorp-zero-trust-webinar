@@ -55,6 +55,45 @@ locals {
       ]
     )
   }
+
+  otp_user_data = {
+    package_update = true
+    packages       = ["unzip"]
+
+    write_files = [
+      {
+        content = base64encode(templatefile("${path.module}/templates/vault-helper-config.hcl.tpl",
+          {
+            vault_endpoint = "http://${module.alb.lb_dns_name}:8200"
+          }
+        ))
+        encoding    = "b64"
+        owner       = "root:root"
+        path        = "/etc/vault-helper.d/config.hcl"
+        permissions = "0644"
+      }
+    ]
+
+    runcmd = concat(
+      [
+        "wget https://releases.hashicorp.com/vault-ssh-helper/0.2.1/vault-ssh-helper_0.2.1_linux_amd64.zip",
+        "unzip vault-ssh-helper_0.2.1_linux_amd64.zip -d /usr/local/bin/",
+        # disable common-auth
+        "sed -i -e 's/^@include common-auth/#@include common-auth/g' /etc/pam.d/sshd",
+        # allow Helper to use pam_exec
+        "echo \"auth requisite pam_exec.so quiet expose_authtok log=/tmp/vaultssh.log /usr/local/bin/vault-ssh-helper -config=/etc/vault-helper.d/config.hcl\" | tee -a /etc/pam.d/sshd",
+        "echo \"auth optional pam_unix.so not_set_pass use_first_pass nodelay\" | tee -a /etc/pam.d/sshd",
+        # enable ChallengeResponseAuthentication
+        "sed -i -e 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config",
+        # allow to use PAM
+        "sed -i -e 's/UsePAM no/UsePAM yes/g' /etc/ssh/sshd_config",
+        # disable password authentication
+        "sed -i -e 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config",
+        # restart SSH server
+        "systemctl restart sshd"
+      ]
+    )
+  }
 }
 
 resource "aws_instance" "boundary_instance" {
@@ -72,6 +111,25 @@ resource "aws_instance" "boundary_instance" {
 ## template: jinja
 #cloud-config
 ${yamlencode(local.user_data)}
+EOF
+  )
+}
+
+
+resource "aws_instance" "boundary_otp_instance" {
+
+  ami                    = local.image_id
+  instance_type          = "t3.micro"
+  subnet_id              = local.public_subnets[2]
+  key_name               = aws_key_pair.bitrock.key_name
+  vpc_security_group_ids = [aws_security_group.boundary-ssh.id]
+  tags                   = { "Name" : "boundary-3-prod", "service-type" : "backend", "application" : "otp" }
+
+
+  user_data_base64 = base64encode(<<EOF
+## template: jinja
+#cloud-config
+${yamlencode(local.otp_user_data)}
 EOF
   )
 }
