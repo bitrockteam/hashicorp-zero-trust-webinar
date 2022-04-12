@@ -1,7 +1,9 @@
 # Hashicorp Zero Trust Webinar
  
-The `aws/` directory contains an example AWS architecture codified in Terraform and will deploy infrastructure consisting of 3 controllers, 3 worker, 1 PostgreSQL DB and 1 target.
+The `aws/` directory contains an example AWS architecture codified in Terraform and will deploy infrastructure consisting of 3 controllers, 3 worker, 1 PostgreSQL DB, a Vault Cluster and 2 vm target.
+
 The `boundary/` directory contains an example Terraform configuration for setting up and configuring Boundary resources using the [Boundary Terraform Provider](https://github.com/hashicorp/terraform-provider-boundary).
+
 The `vault/` directory contains an example Terraform configuration for setting up and configuring Vault resources using the [Vault Terraform Provider](https://github.com/hashicorp/terraform-provider-vault).
 
 
@@ -21,7 +23,7 @@ The `vault/` directory contains an example Terraform configuration for setting u
 - Repeat the same process for the boundary folder
 
 
-![](https://github.com/hashicorp/boundary-reference-architecture/raw/main/deployment/aws/arch.png)
+![](arch.png)
 
 ## Reference
 
