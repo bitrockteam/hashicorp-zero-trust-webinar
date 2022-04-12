@@ -81,7 +81,7 @@ locals {
         # disable common-auth
         "sed -i -e 's/^@include common-auth/#@include common-auth/g' /etc/pam.d/sshd",
         # allow Helper to use pam_exec
-        "echo \"auth requisite pam_exec.so quiet expose_authtok log=/tmp/vaultssh.log /usr/local/bin/vault-ssh-helper -config=/etc/vault-helper.d/config.hcl\" | tee -a /etc/pam.d/sshd",
+        "echo \"auth requisite pam_exec.so quiet expose_authtok log=/tmp/vaultssh.log /usr/local/bin/vault-ssh-helper -config=/etc/vault-helper.d/config.hcl -dev\" | tee -a /etc/pam.d/sshd",
         "echo \"auth optional pam_unix.so not_set_pass use_first_pass nodelay\" | tee -a /etc/pam.d/sshd",
         # enable ChallengeResponseAuthentication
         "sed -i -e 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config",
