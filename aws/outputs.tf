@@ -3,6 +3,14 @@ output "dns_name" {
   value       = module.alb.lb_dns_name
 }
 
+output "vault_endpoint" {
+  value = "http://${module.alb.lb_dns_name}:8200"
+}
+
+output "boundary_endpoint" {
+  value = "http://${module.alb.lb_dns_name}"
+}
+
 output "postgres_endpoint" {
   value = module.postgresql.db_instance_endpoint
 }

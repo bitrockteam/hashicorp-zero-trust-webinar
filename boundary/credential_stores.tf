@@ -2,7 +2,7 @@
 resource "boundary_credential_store_vault" "vault" {
   name        = "Vault Creds Store"
   description = "Production Vault credential store!"
-  address     = var.vault_fqdn
+  address     = var.vault_endpoint != null ? var.vault_endpoint : data.terraform_remote_state.aws.outputs.vault_endpoint
   token       = var.vault_token_for_boundary != null ? var.vault_token_for_boundary : data.terraform_remote_state.vault.outputs.boundary_vault_token
   scope_id    = boundary_scope.project_prod_support.id
   // scope_id    = boundary_scope.org.id
@@ -11,7 +11,7 @@ resource "boundary_credential_store_vault" "vault" {
 resource "boundary_credential_store_vault" "vault-erp" {
   name        = "ERP Vault Creds Store"
   description = "ERP Vault credential store!"
-  address     = var.vault_fqdn
+  address     = var.vault_endpoint != null ? var.vault_endpoint : data.terraform_remote_state.aws.outputs.vault_endpoint
   token       = var.vault_erp_token_for_boundary != null ? var.vault_erp_token_for_boundary : data.terraform_remote_state.vault.outputs.boundary_vault_erp_token
   scope_id    = boundary_scope.project_northwind_erp.id
 }

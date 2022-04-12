@@ -1,7 +1,14 @@
 // Common args
 variable "vault_endpoint" {
-  type = string
+  type    = string
+  default = null
 }
+
+variable "vault_token" {
+  type    = string
+  default = null
+}
+
 variable "vault_skip_tls_verify" {
   type    = bool
   default = false

@@ -1,6 +1,6 @@
-variable "url" {
-  default = "http://127.0.0.1:9200"
-  #  default = "http://boundary-demo-controller-ec52c62e6a9979ab.elb.us-east-1.amazonaws.com:9200"
+variable "boundary_endpoint" {
+  type    = string
+  default = null
 }
 
 variable "org" {
@@ -18,8 +18,9 @@ variable "vault_token_for_boundary" {
   sensitive = true
 }
 
-variable "vault_fqdn" {
-  default = "http://127.0.0.1:8200"
+variable "vault_endpoint" {
+  type    = string
+  default = null
 }
 
 variable "vault_psql_dba_path" {
